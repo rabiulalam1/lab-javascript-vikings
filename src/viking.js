@@ -19,12 +19,10 @@ class Viking extends Soldier {
   }
   receiveDamage = (damage) => {
     this.health -= damage;
-    switch (this.health > 0) {
-      case true:
-        return `${this.name} has received ${damage} points of damage`;
-      default:
-        return `${this.name} has died in act of combat`;
-    }
+    if (this.health > 0)
+      return `${this.name} has received ${damage} points of damage`;
+
+    return `${this.name} has died in act of combat`;
   };
   battleCry = () => {
     return "Odin Owns You All!";
@@ -34,12 +32,10 @@ class Viking extends Soldier {
 class Saxon extends Soldier {
   receiveDamage = (damage) => {
     this.health -= damage;
-    switch (this.health > 0) {
-      case true:
-        return `A Saxon has received ${damage} points of damage`;
-      default:
-        return "A Saxon has died in combat";
-    }
+    if (this.health > 0)
+      return `A Saxon has received ${damage} points of damage`;
+
+    return "A Saxon has died in combat";
   };
 }
 // War
@@ -54,30 +50,26 @@ class War {
   addSaxon = (saxon) => {
     this.saxonArmy.push(saxon);
   };
+
   vikingAttack = () => {
-    let viking = this.vikingArmy[
-      Math.floor(Math.random() * this.vikingArmy.length)
-    ];
-    let saxon = this.saxonArmy[
-      Math.floor(Math.random() * this.saxonArmy.length)
-    ];
+    let viking = this.vikingArmy[this.random(this.vikingArmy.length)];
+    let saxon = this.saxonArmy[this.random(this.saxonArmy.length)];
     let result = saxon.receiveDamage(viking.attack());
     if (saxon.health <= 0)
       this.saxonArmy.splice(this.saxonArmy.indexOf(saxon), 1);
     return result;
   };
   saxonAttack = () => {
-    let viking = this.vikingArmy[
-      Math.floor(Math.random() * this.vikingArmy.length)
-    ];
-    let saxon = this.saxonArmy[
-      Math.floor(Math.random() * this.saxonArmy.length)
-    ];
+    let viking = this.vikingArmy[this.random(this.vikingArmy.length)];
+    let saxon = this.saxonArmy[this.random(this.saxonArmy.length)];
     let result = viking.receiveDamage(saxon.attack());
     if (viking.health <= 0)
       this.vikingArmy.splice(this.vikingArmy.indexOf(viking), 1);
     return result;
   };
+
+  random = (armyLength) => Math.floor(Math.random() * armyLength);
+
   showStatus = () => {
     if (this.saxonArmy.length == 0)
       return "Vikings have won the war of the century!";
